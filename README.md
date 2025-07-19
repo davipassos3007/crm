@@ -32,6 +32,15 @@ Um sistema CRM completo e moderno para imobiliárias, desenvolvido em React com 
 - **Segmentação Automática**: Leads organizados por perfil
 - **Templates Personalizados**: Mensagens adaptadas por contexto
 
+### Comunicação em Massa 📢
+- **Disparo WhatsApp**: Mensagens em massa com alta taxa de entrega
+- **SMS Marketing**: Campanhas via SMS com templates personalizados
+- **Notificações Web Push**: Alertas em tempo real no navegador
+- **Agendamento Inteligente**: Disparos programados por data/hora
+- **Templates Variáveis**: Personalização automática com dados do lead
+- **Filtros Avançados**: Segmentação por score, interesse e comportamento
+- **Monitoramento em Tempo Real**: Métricas de entrega, leitura e resposta
+
 ### Gestão de Imóveis
 - Catálogo de imóveis disponíveis
 - Informações detalhadas (área, dormitórios, valor)
@@ -129,6 +138,26 @@ src/
 - **Conversion Funnels**: Visualização completa da jornada do cliente
 - **Relatórios Avançados**: Insights acionáveis para otimização
 
+## 📱 Comunicação Multi-Canal
+
+### Disparo em Massa
+- **Interface Intuitiva**: Modal completo para criação de disparos
+- **3 Canais Integrados**: WhatsApp, SMS e Push Notifications
+- **Seleção Inteligente**: Filtros rápidos por score e comportamento
+- **Estimativa de Custo**: Cálculo automático por canal
+
+### Templates Dinâmicos
+- **Variáveis Personalizadas**: {{nome}}, {{telefone}}, {{orcamento}}
+- **Aprovação de Templates**: Sistema de validação integrado
+- **Categorização**: Boas-vindas, Follow-up, Promocional, Urgente
+- **Preview em Tempo Real**: Visualização antes do envio
+
+### Agendamento e Monitoramento
+- **Agendamento Flexível**: Data e hora específicas
+- **Status em Tempo Real**: Enviado, Entregue, Lido, Respondido
+- **Histórico Completo**: Todas as comunicações registradas
+- **Analytics Detalhado**: Performance por canal e campanha
+
 ## 📊 Dados Demo
 
 O sistema vem com dados de demonstração incluindo:
@@ -137,6 +166,9 @@ O sistema vem com dados de demonstração incluindo:
 - 3 campanhas de marketing ativas
 - 3 automações configuradas
 - 2 funis de vendas completos
+- **3 disparos em massa** (WhatsApp, SMS, Push)
+- **4 templates de mensagem** personalizáveis
+- **2 disparos agendados** para os próximos dias
 - Métricas simuladas de performance
 - Histórico de interações fictício
 

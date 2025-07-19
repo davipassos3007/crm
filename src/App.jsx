@@ -38,7 +38,15 @@ import {
   Workflow,
   FileText,
   Activity,
-  PieChart
+  PieChart,
+  Smartphone,
+  MessageCircle,
+  Volume2,
+  Radio,
+  Upload,
+  Download,
+  Globe,
+  Megaphone
 } from 'lucide-react';
 
 const CRMImobiliario = () => {
@@ -63,6 +71,15 @@ const CRMImobiliario = () => {
   const [funis, setFunis] = useState([]);
   const [showCreateCampaign, setShowCreateCampaign] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
+
+  // Comunicação em Massa
+  const [dispensadores, setDispensadores] = useState([]);
+  const [templates, setTemplates] = useState([]);
+  const [showBulkMessage, setShowBulkMessage] = useState(false);
+  const [selectedLeadsForBulk, setSelectedLeadsForBulk] = useState([]);
+  const [bulkMessageType, setBulkMessageType] = useState('whatsapp');
+  const [bulkMessage, setBulkMessage] = useState('');
+  const [scheduledMessages, setScheduledMessages] = useState([]);
 
   // Dados mockados iniciais
   useEffect(() => {
@@ -236,6 +253,109 @@ const CRMImobiliario = () => {
         ]
       }
     ]);
+
+    // Dados de comunicação em massa
+    setDispensadores([
+      {
+        id: 1,
+        nome: 'Boas-vindas Novos Leads',
+        tipo: 'whatsapp',
+        status: 'enviado',
+        destinatarios: 45,
+        enviados: 45,
+        entregues: 43,
+        lidos: 38,
+        respondidos: 12,
+        dataEnvio: '2025-01-18T09:00:00',
+        agendado: false
+      },
+      {
+        id: 2,
+        nome: 'Lançamento Vila Nova',
+        tipo: 'sms',
+        status: 'agendado',
+        destinatarios: 156,
+        enviados: 0,
+        entregues: 0,
+        lidos: 0,
+        respondidos: 0,
+        dataEnvio: '2025-01-19T10:00:00',
+        agendado: true
+      },
+      {
+        id: 3,
+        nome: 'Convite Evento VIP',
+        tipo: 'push',
+        status: 'enviando',
+        destinatarios: 89,
+        enviados: 67,
+        entregues: 64,
+        lidos: 45,
+        respondidos: 8,
+        dataEnvio: '2025-01-18T14:30:00',
+        agendado: false
+      }
+    ]);
+
+    setTemplates([
+      {
+        id: 1,
+        nome: 'Boas-vindas Lead',
+        tipo: 'whatsapp',
+        categoria: 'boas-vindas',
+        conteudo: 'Olá {{nome}}! 👋 Bem-vindo(a) à nossa imobiliária! Estamos aqui para te ajudar a encontrar o imóvel dos seus sonhos. Como posso te ajudar hoje?',
+        variaveis: ['nome'],
+        aprovado: true
+      },
+      {
+        id: 2,
+        nome: 'Follow-up Interessado',
+        tipo: 'whatsapp',
+        categoria: 'follow-up',
+        conteudo: 'Oi {{nome}}! Vi que você demonstrou interesse em imóveis para {{tipo_interesse}}. Encontrei algumas opções incríveis na sua faixa de R$ {{orcamento}}. Gostaria de ver?',
+        variaveis: ['nome', 'tipo_interesse', 'orcamento'],
+        aprovado: true
+      },
+      {
+        id: 3,
+        nome: 'Lançamento SMS',
+        tipo: 'sms',
+        categoria: 'promocional',
+        conteudo: '🏠 NOVO LANÇAMENTO! {{nome}}, apartamentos a partir de R$ {{valor}} na {{regiao}}. Visite nosso estande! Link: {{link}}',
+        variaveis: ['nome', 'valor', 'regiao', 'link'],
+        aprovado: true
+      },
+      {
+        id: 4,
+        nome: 'Notificação Web',
+        tipo: 'push',
+        categoria: 'urgente',
+        conteudo: '🔥 {{nome}}, imóvel no seu orçamento disponível! Apenas R$ {{valor}} na {{regiao}}. Clique para ver!',
+        variaveis: ['nome', 'valor', 'regiao'],
+        aprovado: true
+      }
+    ]);
+
+    setScheduledMessages([
+      {
+        id: 1,
+        nome: 'Follow-up Semanal',
+        tipo: 'whatsapp',
+        agendamento: '2025-01-25T09:00:00',
+        destinatarios: 23,
+        template: 'Follow-up Interessado',
+        status: 'agendado'
+      },
+      {
+        id: 2,
+        nome: 'Promoção Fim de Mês',
+        tipo: 'sms',
+        agendamento: '2025-01-31T16:00:00',
+        destinatarios: 342,
+        template: 'Lançamento SMS',
+        status: 'agendado'
+      }
+    ]);
   }, []);
 
   // Simulador de IA
@@ -386,11 +506,11 @@ const CRMImobiliario = () => {
             </ul>
           </div>
           <div className="bg-white p-4 rounded border">
-            <h3 className="font-medium text-gray-900 mb-2">Marketing</h3>
+            <h3 className="font-medium text-gray-900 mb-2">Comunicação</h3>
             <ul className="text-sm text-gray-600 space-y-1">
-              <li>• 2 campanhas ativas performando bem</li>
-              <li>• Taxa abertura +3.2% vs mês anterior</li>
-              <li>• 43 conversões este mês</li>
+              <li>• 112 mensagens enviadas hoje</li>
+              <li>• 2 disparos agendados</li>
+              <li>• 85% taxa entrega WhatsApp</li>
             </ul>
           </div>
           <div className="bg-white p-4 rounded border">
@@ -1115,6 +1235,311 @@ const CRMImobiliario = () => {
     </div>
   );
 
+  // Componente de Comunicação em Massa
+  const ComunicacaoMassa = () => (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-gray-900">Comunicação em Massa</h1>
+        <button 
+          onClick={() => setShowBulkMessage(true)}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
+        >
+          <Megaphone className="w-4 h-4 mr-2" />
+          Novo Disparo
+        </button>
+      </div>
+
+      {/* Métricas de Comunicação */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="flex items-center">
+            <MessageCircle className="w-8 h-8 text-green-600" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">WhatsApp Enviados</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {dispensadores.filter(d => d.tipo === 'whatsapp').reduce((acc, d) => acc + d.enviados, 0)}
+              </p>
+              <p className="text-sm text-green-600">85% taxa entrega</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="flex items-center">
+            <Smartphone className="w-8 h-8 text-blue-600" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">SMS Enviados</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {dispensadores.filter(d => d.tipo === 'sms').reduce((acc, d) => acc + d.enviados, 0)}
+              </p>
+              <p className="text-sm text-blue-600">98% taxa entrega</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="flex items-center">
+            <Globe className="w-8 h-8 text-purple-600" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Push Enviados</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {dispensadores.filter(d => d.tipo === 'push').reduce((acc, d) => acc + d.enviados, 0)}
+              </p>
+              <p className="text-sm text-purple-600">72% taxa entrega</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="flex items-center">
+            <Clock className="w-8 h-8 text-orange-600" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Agendados</p>
+              <p className="text-2xl font-bold text-gray-900">{scheduledMessages.length}</p>
+              <p className="text-sm text-orange-600">Próximos 7 dias</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs de Navegação */}
+      <div className="bg-white rounded-lg shadow border">
+        <div className="border-b border-gray-200">
+          <nav className="-mb-px flex space-x-8 px-6">
+            {['dispensadores', 'templates', 'agendados'].map((tab) => (
+              <button
+                key={tab}
+                className={`py-4 px-1 border-b-2 font-medium text-sm capitalize ${
+                  activeTab.includes(tab) || (tab === 'dispensadores' && activeTab === 'comunicacao')
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+                onClick={() => setActiveTab(`comunicacao-${tab}`)}
+              >
+                {tab === 'dispensadores' ? 'Histórico' : tab}
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        <div className="p-6">
+          {/* Histórico de Dispensadores */}
+          {(activeTab === 'comunicacao' || activeTab === 'comunicacao-dispensadores') && (
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg font-semibold text-gray-900">Histórico de Disparos</h2>
+                <div className="flex space-x-2">
+                  <select className="px-3 py-2 border rounded-lg text-sm">
+                    <option>Todos os tipos</option>
+                    <option>WhatsApp</option>
+                    <option>SMS</option>
+                    <option>Push</option>
+                  </select>
+                  <select className="px-3 py-2 border rounded-lg text-sm">
+                    <option>Todos os status</option>
+                    <option>Enviado</option>
+                    <option>Agendado</option>
+                    <option>Enviando</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 border-b">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Disparo</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipo</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Performance</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data/Hora</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {dispensadores.map(disparo => (
+                      <tr key={disparo.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4">
+                          <div>
+                            <div className="font-medium text-gray-900">{disparo.nome}</div>
+                            <div className="text-sm text-gray-500">{disparo.destinatarios} destinatários</div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center">
+                            {disparo.tipo === 'whatsapp' && <MessageCircle className="w-4 h-4 text-green-600 mr-2" />}
+                            {disparo.tipo === 'sms' && <Smartphone className="w-4 h-4 text-blue-600 mr-2" />}
+                            {disparo.tipo === 'push' && <Globe className="w-4 h-4 text-purple-600 mr-2" />}
+                            <span className="capitalize">{disparo.tipo}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            disparo.status === 'enviado' ? 'bg-green-100 text-green-800' :
+                            disparo.status === 'agendado' ? 'bg-yellow-100 text-yellow-800' :
+                            disparo.status === 'enviando' ? 'bg-blue-100 text-blue-800' :
+                            'bg-gray-100 text-gray-800'
+                          }`}>
+                            {disparo.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="text-sm">
+                            <div>Enviados: {disparo.enviados}/{disparo.destinatarios}</div>
+                            <div>Entregues: {disparo.entregues} ({disparo.enviados > 0 ? ((disparo.entregues / disparo.enviados) * 100).toFixed(1) : 0}%)</div>
+                            <div>Lidos: {disparo.lidos} ({disparo.entregues > 0 ? ((disparo.lidos / disparo.entregues) * 100).toFixed(1) : 0}%)</div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="text-sm">
+                            <div>{new Date(disparo.dataEnvio).toLocaleDateString('pt-BR')}</div>
+                            <div className="text-gray-500">{new Date(disparo.dataEnvio).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center space-x-2">
+                            <button className="text-blue-600 hover:text-blue-900">
+                              <Eye className="w-4 h-4" />
+                            </button>
+                            <button className="text-green-600 hover:text-green-900">
+                              <Download className="w-4 h-4" />
+                            </button>
+                            {disparo.status === 'agendado' && (
+                              <button className="text-red-600 hover:text-red-900">
+                                <X className="w-4 h-4" />
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Templates */}
+          {activeTab === 'comunicacao-templates' && (
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg font-semibold text-gray-900">Templates de Mensagem</h2>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Novo Template
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {templates.map(template => (
+                  <div key={template.id} className="bg-white border rounded-lg p-6 hover:shadow-md transition-shadow">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center">
+                        {template.tipo === 'whatsapp' && <MessageCircle className="w-6 h-6 text-green-600 mr-2" />}
+                        {template.tipo === 'sms' && <Smartphone className="w-6 h-6 text-blue-600 mr-2" />}
+                        {template.tipo === 'push' && <Globe className="w-6 h-6 text-purple-600 mr-2" />}
+                        <div>
+                          <h3 className="font-semibold text-gray-900">{template.nome}</h3>
+                          <span className="text-xs text-gray-500 capitalize">{template.categoria}</span>
+                        </div>
+                      </div>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${
+                        template.aprovado ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {template.aprovado ? 'Aprovado' : 'Pendente'}
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="bg-gray-50 p-3 rounded text-sm">
+                        {template.conteudo}
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-1">
+                        {template.variaveis.map((variavel, index) => (
+                          <span key={index} className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">
+                            {variavel}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4 flex justify-between">
+                      <button className="text-blue-600 hover:text-blue-900 text-sm">
+                        Editar
+                      </button>
+                      <button className="text-green-600 hover:text-green-900 text-sm">
+                        Usar Template
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Mensagens Agendadas */}
+          {activeTab === 'comunicacao-agendados' && (
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg font-semibold text-gray-900">Disparos Agendados</h2>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center">
+                  <Clock className="w-4 h-4 mr-2" />
+                  Agendar Novo
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {scheduledMessages.map(scheduled => (
+                  <div key={scheduled.id} className="bg-white border rounded-lg p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center">
+                        {scheduled.tipo === 'whatsapp' && <MessageCircle className="w-6 h-6 text-green-600 mr-2" />}
+                        {scheduled.tipo === 'sms' && <Smartphone className="w-6 h-6 text-blue-600 mr-2" />}
+                        {scheduled.tipo === 'push' && <Globe className="w-6 h-6 text-purple-600 mr-2" />}
+                        <div>
+                          <h3 className="font-semibold text-gray-900">{scheduled.nome}</h3>
+                          <span className="text-sm text-gray-500">{scheduled.destinatarios} destinatários</span>
+                        </div>
+                      </div>
+                      <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-medium">
+                        Agendado
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="bg-blue-50 p-3 rounded">
+                        <div className="text-sm font-medium text-blue-700 mb-1">Template:</div>
+                        <div className="text-sm text-blue-600">{scheduled.template}</div>
+                      </div>
+                      
+                      <div className="bg-gray-50 p-3 rounded">
+                        <div className="text-sm font-medium text-gray-700 mb-1">Agendamento:</div>
+                        <div className="text-sm text-gray-600">
+                          {new Date(scheduled.agendamento).toLocaleDateString('pt-BR')} às {' '}
+                          {new Date(scheduled.agendamento).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4 flex justify-between">
+                      <button className="text-blue-600 hover:text-blue-900 text-sm">
+                        Editar
+                      </button>
+                      <button className="text-red-600 hover:text-red-900 text-sm">
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
   // Menu lateral
   const Sidebar = () => {
     const menuItems = [
@@ -1122,6 +1547,7 @@ const CRMImobiliario = () => {
       { id: 'leads', label: 'Leads', icon: Users },
       { id: 'imoveis', label: 'Imóveis', icon: Building },
       { id: 'marketing', label: 'Marketing', icon: Zap },
+      { id: 'comunicacao', label: 'Comunicação', icon: Megaphone },
       { id: 'calendar', label: 'Agenda', icon: Calendar },
       { id: 'reports', label: 'Relatórios', icon: BarChart3 },
       { id: 'settings', label: 'Configurações', icon: Settings },
@@ -1171,6 +1597,11 @@ const CRMImobiliario = () => {
       case 'marketing-automacoes':
       case 'marketing-funis':
         return <MarketingAutomation />;
+      case 'comunicacao':
+      case 'comunicacao-dispensadores':
+      case 'comunicacao-templates':
+      case 'comunicacao-agendados':
+        return <ComunicacaoMassa />;
       case 'calendar':
         return (
           <div className="text-center py-12">
@@ -1253,6 +1684,10 @@ const CRMImobiliario = () => {
       
       {selectedCampaign && (
         <CampaignModal campaign={selectedCampaign} onClose={() => setSelectedCampaign(null)} />
+      )}
+
+      {showBulkMessage && (
+        <BulkMessageModal onClose={() => setShowBulkMessage(false)} />
       )}
     </div>
   );
@@ -1412,6 +1847,261 @@ const CampaignModal = ({ campaign, onClose }) => {
               <Target className="w-4 h-4 mr-2" />
               Duplicar Campanha
             </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Modal de Disparo em Massa
+const BulkMessageModal = ({ onClose }) => {
+  const [selectedType, setSelectedType] = React.useState('whatsapp');
+  const [selectedTemplate, setSelectedTemplate] = React.useState('');
+  const [selectedLeads, setSelectedLeads] = React.useState([]);
+  const [message, setMessage] = React.useState('');
+  const [isScheduled, setIsScheduled] = React.useState(false);
+  const [scheduleDate, setScheduleDate] = React.useState('');
+  const [scheduleTime, setScheduleTime] = React.useState('');
+
+  const mockLeads = [
+    { id: 1, nome: 'João Silva', telefone: '(11) 99999-9999', email: 'joao@email.com', score: 85 },
+    { id: 2, nome: 'Maria Santos', telefone: '(11) 88888-8888', email: 'maria@email.com', score: 92 },
+    { id: 3, nome: 'Carlos Oliveira', telefone: '(11) 77777-7777', email: 'carlos@email.com', score: 95 }
+  ];
+
+  const mockTemplates = {
+    whatsapp: [
+      { id: 1, nome: 'Boas-vindas Lead', conteudo: 'Olá {{nome}}! 👋 Bem-vindo(a) à nossa imobiliária!' },
+      { id: 2, nome: 'Follow-up Interessado', conteudo: 'Oi {{nome}}! Vi que você demonstrou interesse...' }
+    ],
+    sms: [
+      { id: 3, nome: 'Lançamento SMS', conteudo: '🏠 NOVO LANÇAMENTO! {{nome}}, apartamentos a partir de R$ {{valor}}' }
+    ],
+    push: [
+      { id: 4, nome: 'Notificação Web', conteudo: '🔥 {{nome}}, imóvel no seu orçamento disponível!' }
+    ]
+  };
+
+  const handleSendMessage = () => {
+    // Simular envio
+    alert(`Disparo ${isScheduled ? 'agendado' : 'enviado'} para ${selectedLeads.length} lead(s) via ${selectedType.toUpperCase()}!`);
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg max-w-4xl w-full max-h-screen overflow-y-auto">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Novo Disparo em Massa</h2>
+            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Configuração do Disparo */}
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Tipo de Comunicação</label>
+                <div className="grid grid-cols-3 gap-3">
+                  {['whatsapp', 'sms', 'push'].map(type => (
+                    <button
+                      key={type}
+                      onClick={() => setSelectedType(type)}
+                      className={`p-4 border rounded-lg text-center ${
+                        selectedType === type 
+                          ? 'border-blue-500 bg-blue-50 text-blue-700' 
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      {type === 'whatsapp' && <MessageCircle className="w-6 h-6 mx-auto mb-2 text-green-600" />}
+                      {type === 'sms' && <Smartphone className="w-6 h-6 mx-auto mb-2 text-blue-600" />}
+                      {type === 'push' && <Globe className="w-6 h-6 mx-auto mb-2 text-purple-600" />}
+                      <div className="text-sm font-medium capitalize">{type}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Template</label>
+                <select 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  value={selectedTemplate}
+                  onChange={(e) => setSelectedTemplate(e.target.value)}
+                >
+                  <option value="">Selecione um template ou digite uma mensagem</option>
+                  {mockTemplates[selectedType]?.map(template => (
+                    <option key={template.id} value={template.id}>{template.nome}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Mensagem</label>
+                <textarea
+                  rows={6}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  placeholder={`Digite sua mensagem para ${selectedType}...`}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                />
+                <div className="text-xs text-gray-500 mt-1">
+                  Use variáveis como {{nome}}, {{telefone}}, {{email}} para personalizar
+                </div>
+              </div>
+
+              <div className="border-t pt-4">
+                <div className="flex items-center mb-4">
+                  <input
+                    type="checkbox"
+                    id="schedule"
+                    checked={isScheduled}
+                    onChange={(e) => setIsScheduled(e.target.checked)}
+                    className="rounded border-gray-300"
+                  />
+                  <label htmlFor="schedule" className="ml-2 text-sm font-medium text-gray-700">
+                    Agendar disparo
+                  </label>
+                </div>
+                
+                {isScheduled && (
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Data</label>
+                      <input
+                        type="date"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                        value={scheduleDate}
+                        onChange={(e) => setScheduleDate(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Horário</label>
+                      <input
+                        type="time"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                        value={scheduleTime}
+                        onChange={(e) => setScheduleTime(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Seleção de Destinatários */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold text-gray-900">Destinatários</h3>
+                <div className="text-sm text-gray-500">
+                  {selectedLeads.length} selecionado(s)
+                </div>
+              </div>
+
+              <div className="border rounded-lg max-h-64 overflow-y-auto">
+                <div className="p-3 border-b bg-gray-50">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedLeads(mockLeads.map(lead => lead.id));
+                        } else {
+                          setSelectedLeads([]);
+                        }
+                      }}
+                      checked={selectedLeads.length === mockLeads.length}
+                      className="rounded border-gray-300"
+                    />
+                    <label className="ml-2 text-sm font-medium text-gray-700">
+                      Selecionar todos
+                    </label>
+                  </div>
+                </div>
+                
+                {mockLeads.map(lead => (
+                  <div key={lead.id} className="p-3 border-b last:border-b-0">
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedLeads.includes(lead.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedLeads([...selectedLeads, lead.id]);
+                          } else {
+                            setSelectedLeads(selectedLeads.filter(id => id !== lead.id));
+                          }
+                        }}
+                        className="rounded border-gray-300"
+                      />
+                      <div className="ml-3 flex-1">
+                        <div className="text-sm font-medium text-gray-900">{lead.nome}</div>
+                        <div className="text-xs text-gray-500">
+                          {lead.telefone} • Score: {lead.score}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h4 className="font-medium text-blue-900 mb-2">Filtros Rápidos</h4>
+                <div className="space-y-2">
+                  <button className="w-full text-left px-3 py-2 text-sm bg-white border rounded hover:bg-gray-50">
+                    🔥 Leads com score > 90 (2 leads)
+                  </button>
+                  <button className="w-full text-left px-3 py-2 text-sm bg-white border rounded hover:bg-gray-50">
+                    📞 Leads sem contato há 3+ dias
+                  </button>
+                  <button className="w-full text-left px-3 py-2 text-sm bg-white border rounded hover:bg-gray-50">
+                    💰 Leads interessados em compra
+                  </button>
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                <div className="flex items-start">
+                  <AlertTriangle className="w-5 h-5 text-yellow-600 mr-2 mt-0.5" />
+                  <div className="text-sm text-yellow-700">
+                    <div className="font-medium mb-1">Estimativa de Custo</div>
+                    <div>
+                      {selectedType === 'whatsapp' && `${selectedLeads.length} × R$ 0,15 = R$ ${(selectedLeads.length * 0.15).toFixed(2)}`}
+                      {selectedType === 'sms' && `${selectedLeads.length} × R$ 0,08 = R$ ${(selectedLeads.length * 0.08).toFixed(2)}`}
+                      {selectedType === 'push' && `${selectedLeads.length} × R$ 0,02 = R$ ${(selectedLeads.length * 0.02).toFixed(2)}`}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Ações */}
+          <div className="mt-6 flex justify-between">
+            <button 
+              onClick={onClose}
+              className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              Cancelar
+            </button>
+            <div className="flex space-x-3">
+              <button className="px-4 py-2 text-blue-700 border border-blue-300 rounded-lg hover:bg-blue-50">
+                Salvar como Rascunho
+              </button>
+              <button 
+                onClick={handleSendMessage}
+                disabled={selectedLeads.length === 0 || !message}
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 flex items-center"
+              >
+                {selectedType === 'whatsapp' && <MessageCircle className="w-4 h-4 mr-2" />}
+                {selectedType === 'sms' && <Smartphone className="w-4 h-4 mr-2" />}
+                {selectedType === 'push' && <Globe className="w-4 h-4 mr-2" />}
+                {isScheduled ? 'Agendar Disparo' : 'Enviar Agora'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
