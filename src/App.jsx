@@ -27,7 +27,18 @@ import {
   Clock,
   AlertTriangle,
   Menu,
-  X
+  X,
+  Zap,
+  Target,
+  ChevronDown,
+  Play,
+  Pause,
+  BarChart,
+  TrendingDown,
+  Workflow,
+  FileText,
+  Activity,
+  PieChart
 } from 'lucide-react';
 
 const CRMImobiliario = () => {
@@ -45,6 +56,13 @@ const CRMImobiliario = () => {
   // IA Assistant
   const [aiSuggestions, setAiSuggestions] = useState([]);
   const [aiAnalytics, setAiAnalytics] = useState({});
+
+  // Marketing Automation
+  const [campanhas, setCampanhas] = useState([]);
+  const [automacoes, setAutomacoes] = useState([]);
+  const [funis, setFunis] = useState([]);
+  const [showCreateCampaign, setShowCreateCampaign] = useState(false);
+  const [selectedCampaign, setSelectedCampaign] = useState(null);
 
   // Dados mockados iniciais
   useEffect(() => {
@@ -127,6 +145,97 @@ const CRMImobiliario = () => {
       hotLeads: 12,
       predictedSales: 8
     });
+
+    // Dados de automação de marketing
+    setCampanhas([
+      {
+        id: 1,
+        nome: 'Campanha Leads Novos',
+        tipo: 'email',
+        status: 'ativa',
+        enviados: 1250,
+        abertos: 312,
+        cliques: 48,
+        conversoes: 12,
+        dataInicio: '2025-01-15',
+        segmento: 'novos'
+      },
+      {
+        id: 2,
+        nome: 'WhatsApp Follow-up',
+        tipo: 'whatsapp',
+        status: 'ativa',
+        enviados: 890,
+        abertos: 756,
+        cliques: 89,
+        conversoes: 23,
+        dataInicio: '2025-01-10',
+        segmento: 'interessados'
+      },
+      {
+        id: 3,
+        nome: 'Nurturing Compradores VIP',
+        tipo: 'email',
+        status: 'pausada',
+        enviados: 156,
+        abertos: 98,
+        cliques: 34,
+        conversoes: 8,
+        dataInicio: '2025-01-01',
+        segmento: 'vip'
+      }
+    ]);
+
+    setAutomacoes([
+      {
+        id: 1,
+        nome: 'Lead Score Alto',
+        trigger: 'score >= 90',
+        acao: 'Enviar WhatsApp urgente',
+        status: 'ativa',
+        execucoes: 23
+      },
+      {
+        id: 2,
+        nome: 'Sem interação 3 dias',
+        trigger: 'ultima_interacao > 3 dias',
+        acao: 'Email follow-up',
+        status: 'ativa',
+        execucoes: 156
+      },
+      {
+        id: 3,
+        nome: 'Orçamento > 800k',
+        trigger: 'orcamento > 800000',
+        acao: 'Agendar ligação',
+        status: 'ativa',
+        execucoes: 12
+      }
+    ]);
+
+    setFunis([
+      {
+        id: 1,
+        nome: 'Funil Compra Residencial',
+        etapas: [
+          { nome: 'Lead Novo', quantidade: 120, conversao: 100 },
+          { nome: 'Qualificado', quantidade: 89, conversao: 74.2 },
+          { nome: 'Apresentação', quantidade: 45, conversao: 50.6 },
+          { nome: 'Proposta', quantidade: 23, conversao: 51.1 },
+          { nome: 'Fechamento', quantidade: 12, conversao: 52.2 }
+        ]
+      },
+      {
+        id: 2,
+        nome: 'Funil Locação',
+        etapas: [
+          { nome: 'Interessado', quantidade: 85, conversao: 100 },
+          { nome: 'Visita Agendada', quantidade: 67, conversao: 78.8 },
+          { nome: 'Documentação', quantidade: 34, conversao: 50.7 },
+          { nome: 'Contrato', quantidade: 28, conversao: 82.4 }
+        ]
+      }
+    ]);
   }, []);
 
   // Simulador de IA
@@ -267,13 +376,21 @@ const CRMImobiliario = () => {
           <Bot className="w-6 h-6 text-blue-600 mr-2" />
           <h2 className="text-lg font-semibold text-blue-900">Insights da IA</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-white p-4 rounded border">
             <h3 className="font-medium text-gray-900 mb-2">Ações Prioritárias</h3>
             <ul className="text-sm text-gray-600 space-y-1">
               <li>• 3 leads precisam de follow-up urgente</li>
               <li>• João Silva tem 95% chance de conversão</li>
               <li>• 2 propostas vencem em 24h</li>
+            </ul>
+          </div>
+          <div className="bg-white p-4 rounded border">
+            <h3 className="font-medium text-gray-900 mb-2">Marketing</h3>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>• 2 campanhas ativas performando bem</li>
+              <li>• Taxa abertura +3.2% vs mês anterior</li>
+              <li>• 43 conversões este mês</li>
             </ul>
           </div>
           <div className="bg-white p-4 rounded border">
@@ -701,12 +818,310 @@ const CRMImobiliario = () => {
     </div>
   );
 
+  // Componente de Marketing Automation
+  const MarketingAutomation = () => (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-gray-900">Automação de Marketing</h1>
+        <button 
+          onClick={() => setShowCreateCampaign(true)}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Nova Campanha
+        </button>
+      </div>
+
+      {/* Métricas de Performance */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="flex items-center">
+            <Mail className="w-8 h-8 text-blue-600" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Emails Enviados</p>
+              <p className="text-2xl font-bold text-gray-900">1,406</p>
+              <p className="text-sm text-green-600">+12% vs mês anterior</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="flex items-center">
+            <Target className="w-8 h-8 text-green-600" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Taxa Abertura</p>
+              <p className="text-2xl font-bold text-gray-900">28.4%</p>
+              <p className="text-sm text-green-600">+3.2% vs mês anterior</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="flex items-center">
+            <Zap className="w-8 h-8 text-orange-600" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Automações Ativas</p>
+              <p className="text-2xl font-bold text-gray-900">{automacoes.filter(a => a.status === 'ativa').length}</p>
+              <p className="text-sm text-gray-600">327 execuções hoje</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="flex items-center">
+            <TrendingUp className="w-8 h-8 text-yellow-600" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Conversões</p>
+              <p className="text-2xl font-bold text-gray-900">43</p>
+              <p className="text-sm text-green-600">+18% vs mês anterior</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs de Navegação */}
+      <div className="bg-white rounded-lg shadow border">
+        <div className="border-b border-gray-200">
+          <nav className="-mb-px flex space-x-8 px-6">
+            {['campanhas', 'automacoes', 'funis'].map((tab) => (
+              <button
+                key={tab}
+                className={`py-4 px-1 border-b-2 font-medium text-sm capitalize ${
+                  activeTab.includes(tab) || (tab === 'campanhas' && activeTab === 'marketing')
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+                onClick={() => setActiveTab(`marketing-${tab}`)}
+              >
+                {tab}
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        <div className="p-6">
+          {/* Campanhas */}
+          {(activeTab === 'marketing' || activeTab === 'marketing-campanhas') && (
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg font-semibold text-gray-900">Campanhas Ativas</h2>
+                <div className="flex space-x-2">
+                  <select className="px-3 py-2 border rounded-lg text-sm">
+                    <option>Todos os tipos</option>
+                    <option>Email</option>
+                    <option>WhatsApp</option>
+                    <option>SMS</option>
+                  </select>
+                  <select className="px-3 py-2 border rounded-lg text-sm">
+                    <option>Todos os status</option>
+                    <option>Ativa</option>
+                    <option>Pausada</option>
+                    <option>Finalizada</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 border-b">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Campanha</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipo</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Performance</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Conversões</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {campanhas.map(campanha => (
+                      <tr key={campanha.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4">
+                          <div>
+                            <div className="font-medium text-gray-900">{campanha.nome}</div>
+                            <div className="text-sm text-gray-500">Início: {new Date(campanha.dataInicio).toLocaleDateString()}</div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center">
+                            {campanha.tipo === 'email' ? (
+                              <Mail className="w-4 h-4 text-blue-600 mr-2" />
+                            ) : (
+                              <MessageSquare className="w-4 h-4 text-green-600 mr-2" />
+                            )}
+                            <span className="capitalize">{campanha.tipo}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            campanha.status === 'ativa' ? 'bg-green-100 text-green-800' :
+                            campanha.status === 'pausada' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-gray-100 text-gray-800'
+                          }`}>
+                            {campanha.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="text-sm">
+                            <div>Enviados: {campanha.enviados.toLocaleString()}</div>
+                            <div>Taxa Abertura: {((campanha.abertos / campanha.enviados) * 100).toFixed(1)}%</div>
+                            <div>Taxa Clique: {((campanha.cliques / campanha.abertos) * 100).toFixed(1)}%</div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="text-center">
+                            <div className="text-lg font-bold text-gray-900">{campanha.conversoes}</div>
+                            <div className="text-sm text-gray-500">
+                              {((campanha.conversoes / campanha.enviados) * 100).toFixed(1)}%
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center space-x-2">
+                            <button 
+                              onClick={() => setSelectedCampaign(campanha)}
+                              className="text-blue-600 hover:text-blue-900"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </button>
+                            <button className="text-yellow-600 hover:text-yellow-900">
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button className={`${
+                              campanha.status === 'ativa' ? 'text-orange-600 hover:text-orange-900' : 'text-green-600 hover:text-green-900'
+                            }`}>
+                              {campanha.status === 'ativa' ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Automações */}
+          {activeTab === 'marketing-automacoes' && (
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg font-semibold text-gray-900">Automações Configuradas</h2>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Nova Automação
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {automacoes.map(automacao => (
+                  <div key={automacao.id} className="bg-white border rounded-lg p-6 hover:shadow-md transition-shadow">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center">
+                        <Workflow className="w-8 h-8 text-purple-600 mr-3" />
+                        <div>
+                          <h3 className="font-semibold text-gray-900">{automacao.nome}</h3>
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${
+                            automacao.status === 'ativa' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                          }`}>
+                            {automacao.status}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="bg-gray-50 p-3 rounded">
+                        <div className="text-sm font-medium text-gray-700 mb-1">Trigger:</div>
+                        <div className="text-sm text-gray-600">{automacao.trigger}</div>
+                      </div>
+                      
+                      <div className="bg-blue-50 p-3 rounded">
+                        <div className="text-sm font-medium text-blue-700 mb-1">Ação:</div>
+                        <div className="text-sm text-blue-600">{automacao.acao}</div>
+                      </div>
+                      
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-gray-600">Execuções:</span>
+                        <span className="font-semibold text-gray-900">{automacao.execucoes}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4 flex justify-between">
+                      <button className="text-blue-600 hover:text-blue-900 text-sm">
+                        Editar
+                      </button>
+                      <button className={`text-sm ${
+                        automacao.status === 'ativa' ? 'text-orange-600 hover:text-orange-900' : 'text-green-600 hover:text-green-900'
+                      }`}>
+                        {automacao.status === 'ativa' ? 'Pausar' : 'Ativar'}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Funis de Vendas */}
+          {activeTab === 'marketing-funis' && (
+            <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg font-semibold text-gray-900">Funis de Vendas</h2>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Novo Funil
+                </button>
+              </div>
+
+              {funis.map(funil => (
+                <div key={funil.id} className="bg-white border rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-6">{funil.nome}</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    {funil.etapas.map((etapa, index) => (
+                      <div key={index} className="relative">
+                        <div className="bg-gradient-to-b from-blue-50 to-blue-100 border-2 border-blue-200 rounded-lg p-4 text-center">
+                          <div className="text-sm font-medium text-blue-700 mb-2">{etapa.nome}</div>
+                          <div className="text-2xl font-bold text-blue-900 mb-1">{etapa.quantidade}</div>
+                          <div className="text-xs text-blue-600">{etapa.conversao.toFixed(1)}%</div>
+                        </div>
+                        
+                        {index < funil.etapas.length - 1 && (
+                          <div className="hidden md:block absolute top-1/2 -right-2 transform -translate-y-1/2">
+                            <ChevronDown className="w-4 h-4 text-gray-400 rotate-90" />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-6 flex justify-between items-center">
+                    <div className="text-sm text-gray-600">
+                      Taxa de conversão geral: <span className="font-semibold text-gray-900">
+                        {(funil.etapas[funil.etapas.length - 1].quantidade / funil.etapas[0].quantidade * 100).toFixed(1)}%
+                      </span>
+                    </div>
+                    <button className="text-blue-600 hover:text-blue-900 text-sm">
+                      Ver relatório detalhado
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
   // Menu lateral
   const Sidebar = () => {
     const menuItems = [
       { id: 'dashboard', label: 'Dashboard', icon: Home },
       { id: 'leads', label: 'Leads', icon: Users },
       { id: 'imoveis', label: 'Imóveis', icon: Building },
+      { id: 'marketing', label: 'Marketing', icon: Zap },
       { id: 'calendar', label: 'Agenda', icon: Calendar },
       { id: 'reports', label: 'Relatórios', icon: BarChart3 },
       { id: 'settings', label: 'Configurações', icon: Settings },
@@ -751,6 +1166,11 @@ const CRMImobiliario = () => {
         return <LeadsComponent />;
       case 'imoveis':
         return <ImoveisComponent />;
+      case 'marketing':
+      case 'marketing-campanhas':
+      case 'marketing-automacoes':
+      case 'marketing-funis':
+        return <MarketingAutomation />;
       case 'calendar':
         return (
           <div className="text-center py-12">
@@ -826,10 +1246,175 @@ const CRMImobiliario = () => {
         </main>
       </div>
 
-      {/* Modal */}
+      {/* Modals */}
       {selectedLead && (
         <LeadModal lead={selectedLead} onClose={() => setSelectedLead(null)} />
       )}
+      
+      {selectedCampaign && (
+        <CampaignModal campaign={selectedCampaign} onClose={() => setSelectedCampaign(null)} />
+      )}
+    </div>
+  );
+};
+
+// Modal de detalhes da campanha
+const CampaignModal = ({ campaign, onClose }) => {
+  if (!campaign) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg max-w-4xl w-full max-h-screen overflow-y-auto">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Detalhes da Campanha</h2>
+            <button 
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Informações básicas */}
+            <div className="space-y-4">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-gray-900 mb-3">Informações da Campanha</h3>
+                <div className="space-y-2 text-sm">
+                  <div><strong>Nome:</strong> {campaign.nome}</div>
+                  <div><strong>Tipo:</strong> <span className="capitalize">{campaign.tipo}</span></div>
+                  <div><strong>Status:</strong> <span className="capitalize">{campaign.status}</span></div>
+                  <div><strong>Segmento:</strong> <span className="capitalize">{campaign.segmento}</span></div>
+                  <div><strong>Data de Início:</strong> {new Date(campaign.dataInicio).toLocaleDateString('pt-BR')}</div>
+                </div>
+              </div>
+
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-gray-900 mb-3">Performance Geral</h3>
+                <div className="space-y-2 text-sm">
+                  <div><strong>Enviados:</strong> {campaign.enviados.toLocaleString()}</div>
+                  <div><strong>Abertos:</strong> {campaign.abertos.toLocaleString()} ({((campaign.abertos / campaign.enviados) * 100).toFixed(1)}%)</div>
+                  <div><strong>Cliques:</strong> {campaign.cliques.toLocaleString()} ({((campaign.cliques / campaign.abertos) * 100).toFixed(1)}%)</div>
+                  <div><strong>Conversões:</strong> {campaign.conversoes} ({((campaign.conversoes / campaign.enviados) * 100).toFixed(1)}%)</div>
+                </div>
+              </div>
+
+              {/* Gráfico de Performance (placeholder) */}
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <div className="flex items-center mb-2">
+                  <BarChart className="w-5 h-5 text-blue-600 mr-2" />
+                  <h3 className="font-semibold text-blue-900">Performance por Período</h3>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Semana 1:</span>
+                    <span className="font-semibold">{Math.floor(campaign.enviados * 0.3).toLocaleString()} envios</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Semana 2:</span>
+                    <span className="font-semibold">{Math.floor(campaign.enviados * 0.4).toLocaleString()} envios</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Semana 3:</span>
+                    <span className="font-semibold">{Math.floor(campaign.enviados * 0.3).toLocaleString()} envios</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Análises e Insights */}
+            <div className="space-y-4">
+              <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                <div className="flex items-center mb-2">
+                  <TrendingUp className="w-5 h-5 text-green-600 mr-2" />
+                  <h3 className="font-semibold text-green-900">Pontos Positivos</h3>
+                </div>
+                <ul className="text-sm text-green-700 space-y-1">
+                  <li>• Taxa de abertura acima da média do setor (25%)</li>
+                  <li>• Boa segmentação de audience</li>
+                  <li>• {campaign.conversoes} conversões diretas</li>
+                  <li>• ROI estimado em 240%</li>
+                </ul>
+              </div>
+
+              <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                <div className="flex items-center mb-2">
+                  <AlertTriangle className="w-5 h-5 text-yellow-600 mr-2" />
+                  <h3 className="font-semibold text-yellow-900">Oportunidades</h3>
+                </div>
+                <ul className="text-sm text-yellow-700 space-y-1">
+                  <li>• Melhorar taxa de clique (atualmente {((campaign.cliques / campaign.abertos) * 100).toFixed(1)}%)</li>
+                  <li>• Otimizar horário de envio</li>
+                  <li>• Teste A/B no assunto</li>
+                  <li>• Adicionar mais CTAs</li>
+                </ul>
+              </div>
+
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-gray-900 mb-3">Próximas Ações</h3>
+                <div className="space-y-2">
+                  <div className="flex items-center text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-600 mr-2" />
+                    <span>Follow-up para não abridores</span>
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <Clock className="w-4 h-4 text-orange-600 mr-2" />
+                    <span>Retargeting para clicadores</span>
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <Target className="w-4 h-4 text-blue-600 mr-2" />
+                    <span>Segmentação refinada</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Últimas Atividades */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-gray-900 mb-3">Atividade Recente</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center text-sm">
+                    <Activity className="w-4 h-4 text-green-600 mr-2" />
+                    <span className="text-gray-600">3 conversões registradas - Hoje 15:30</span>
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <Mail className="w-4 h-4 text-blue-600 mr-2" />
+                    <span className="text-gray-600">Lote enviado (234 emails) - Hoje 09:00</span>
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <Eye className="w-4 h-4 text-orange-600 mr-2" />
+                    <span className="text-gray-600">45 aberturas registradas - Ontem 18:20</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Ações */}
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center">
+              <Edit className="w-4 h-4 mr-2" />
+              Editar Campanha
+            </button>
+            <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center">
+              <FileText className="w-4 h-4 mr-2" />
+              Exportar Relatório
+            </button>
+            <button className={`px-4 py-2 rounded flex items-center ${
+              campaign.status === 'ativa' 
+                ? 'bg-orange-600 text-white hover:bg-orange-700' 
+                : 'bg-green-600 text-white hover:bg-green-700'
+            }`}>
+              {campaign.status === 'ativa' ? <Pause className="w-4 h-4 mr-2" /> : <Play className="w-4 h-4 mr-2" />}
+              {campaign.status === 'ativa' ? 'Pausar' : 'Reativar'}
+            </button>
+            <button className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 flex items-center">
+              <Target className="w-4 h-4 mr-2" />
+              Duplicar Campanha
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

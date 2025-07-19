@@ -24,6 +24,14 @@ Um sistema CRM completo e moderno para imobiliárias, desenvolvido em React com 
 - Previsão de probabilidade de conversão
 - Chat interativo para consultas
 
+### Automação de Marketing 🚀
+- **Campanhas Multi-Canal**: Email e WhatsApp
+- **Automações Inteligentes**: Triggers baseados em comportamento
+- **Funis de Vendas**: Visualização completa do pipeline
+- **Analytics Avançados**: Métricas de performance em tempo real
+- **Segmentação Automática**: Leads organizados por perfil
+- **Templates Personalizados**: Mensagens adaptadas por contexto
+
 ### Gestão de Imóveis
 - Catálogo de imóveis disponíveis
 - Informações detalhadas (área, dormitórios, valor)
@@ -101,11 +109,34 @@ src/
 - Estimativas de vendas mensais
 - Melhor momento para contato
 
+## 📧 Marketing Automation
+
+### Campanhas Inteligentes
+- **Email Marketing**: Sequências automatizadas com alta taxa de conversão
+- **WhatsApp Business**: Automação de mensagens com templates aprovados
+- **Segmentação Dinâmica**: Leads organizados automaticamente por perfil
+- **A/B Testing**: Otimização contínua de performance
+
+### Automações Comportamentais
+- **Triggers Inteligentes**: Ações automáticas baseadas em score, tempo e comportamento
+- **Follow-up Automático**: Nunca perca um lead por falta de contato
+- **Retargeting**: Re-engajamento de leads inativos
+- **Lead Nurturing**: Educação progressiva até a decisão de compra
+
+### Analytics e Performance
+- **Dashboard em Tempo Real**: Métricas de todas as campanhas
+- **ROI Tracking**: Retorno sobre investimento detalhado
+- **Conversion Funnels**: Visualização completa da jornada do cliente
+- **Relatórios Avançados**: Insights acionáveis para otimização
+
 ## 📊 Dados Demo
 
 O sistema vem com dados de demonstração incluindo:
 - 3 leads com diferentes perfis e scores
 - 2 imóveis de exemplo
+- 3 campanhas de marketing ativas
+- 3 automações configuradas
+- 2 funis de vendas completos
 - Métricas simuladas de performance
 - Histórico de interações fictício
 
